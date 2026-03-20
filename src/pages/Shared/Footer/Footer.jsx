@@ -5,8 +5,8 @@ const navLinks = ['Services', 'Coverage', 'About Us', 'Pricing', 'Blog', 'Contac
 
 const Footer = () => {
     return (
-        <div className="bg-gray-100 px-4 sm:px-8 py-8">
-            <footer className="max-w-[1200px] w-full mx-auto bg-[#111] rounded-2xl px-8 sm:px-16 py-12 text-white text-center">
+        <div className="px-4 sm:px-8 py-8">
+            <footer className="w-full mx-auto bg-[#111] rounded-2xl px-8 sm:px-16 py-12 text-white text-center">
                 <div className="flex justify-center mb-4">
                     <Logo />
                 </div>
