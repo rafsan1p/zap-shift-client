@@ -44,11 +44,11 @@ const NavBar = () => {
             </div>
 
             <div className="navbar-end gap-2">
-                <NavLink to="/signin" className="text-sm font-medium text-gray-700 px-4 py-1.5 hover:bg-gray-100 rounded-full transition">
+                <NavLink to="/login" className="text-sm font-medium text-gray-700 px-4 py-1.5 hover:bg-gray-100 rounded-full transition">
                     Sign In
                 </NavLink>
                 <div className="relative flex items-center">
-                    <NavLink to="/signup" className="bg-[#CAEB45] text-gray-900 font-semibold text-sm px-5 py-2 pr-10 rounded-full hover:bg-[#b8d93a] transition">
+                    <NavLink to="/register" className="bg-[#CAEB45] text-gray-900 font-semibold text-sm px-5 py-2 pr-10 rounded-full hover:bg-[#b8d93a] transition">
                         Sign Up
                     </NavLink>
                     <span className="absolute -right-3 w-9 h-9 bg-gray-900 text-[#CAEB45] rounded-full flex items-center justify-center text-sm font-bold shadow">↗</span>
