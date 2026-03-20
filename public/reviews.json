@@ -1,0 +1,50 @@
+[
+  {
+    "id": "1",
+    "userName": "Rasel Ahmed",
+    "role": "CTO",
+    "review": "ZapShift delivered my parcel within 24 hours. The real-time tracking gave me complete peace of mind throughout the process.",
+    "ratings": 5,
+    "user_photoURL": "https://randomuser.me/api/portraits/men/10.jpg"
+  },
+  {
+    "id": "2",
+    "userName": "Awlad Hossin",
+    "role": "Senior Product Designer",
+    "review": "Exceptional service! The courier was polite, the package arrived in perfect condition, and the delivery was right on schedule.",
+    "ratings": 5,
+    "user_photoURL": "https://randomuser.me/api/portraits/men/34.jpg"
+  },
+  {
+    "id": "3",
+    "userName": "Nasir Uddin",
+    "role": "CEO",
+    "review": "We use ZapShift for all our business shipments. Reliable, affordable, and their nationwide coverage is unmatched in Bangladesh.",
+    "ratings": 5,
+    "user_photoURL": "https://randomuser.me/api/portraits/men/22.jpg"
+  },
+  {
+    "id": "4",
+    "userName": "Fatema Begum",
+    "role": "E-commerce Merchant",
+    "review": "As an online seller, fast delivery is everything. ZapShift never lets me down — my customers are always happy with the service.",
+    "ratings": 5,
+    "user_photoURL": "https://randomuser.me/api/portraits/women/25.jpg"
+  },
+  {
+    "id": "5",
+    "userName": "Karim Hossain",
+    "role": "Operations Manager",
+    "review": "The cash on delivery feature is a game changer for our business. ZapShift handles it securely and efficiently every time.",
+    "ratings": 5,
+    "user_photoURL": "https://randomuser.me/api/portraits/men/19.jpg"
+  },
+  {
+    "id": "6",
+    "userName": "Sumaiya Islam",
+    "role": "Small Business Owner",
+    "review": "I switched to ZapShift 6 months ago and never looked back. Their parcel return service is smooth and hassle-free.",
+    "ratings": 5,
+    "user_photoURL": "https://randomuser.me/api/portraits/women/8.jpg"
+  }
+]

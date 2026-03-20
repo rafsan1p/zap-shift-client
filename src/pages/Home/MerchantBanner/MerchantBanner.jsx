@@ -4,7 +4,7 @@ import locationImg from '../../../assets/location-merchant.png';
 
 const MerchantBanner = () => {
     return (
-        <section className="w-full px-4 sm:px-6 py-10">
+        <section className="w-full px-4 sm:px-6 py-12 mb-10">
             <div
                 className="relative max-w-6xl mx-auto rounded-2xl overflow-hidden flex items-center"
                 style={{ backgroundColor: '#022e2e', backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center top', minHeight: '260px' }}
