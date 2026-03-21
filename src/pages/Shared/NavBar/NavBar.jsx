@@ -1,13 +1,23 @@
 import React from 'react';
 import Logo from '../../../components/Logo/Logo';
 import { NavLink } from 'react-router';
+import useAuth from '../../../hooks/useAuth';
 
 const navLinkClass = ({ isActive }) =>
-    `px-4 py-1.5 rounded-full text-sm font-medium transition ${
-        isActive ? 'bg-[#CAEB45] text-gray-900' : 'text-gray-700 hover:bg-gray-100'
+    `px-4 py-1.5 rounded-full text-sm font-medium transition ${isActive ? 'bg-[#CAEB45] text-gray-900' : 'text-gray-700 hover:bg-gray-100'
     }`;
 
 const NavBar = () => {
+    const { user, logOut } = useAuth();
+
+    const handleLogOut = () =>{
+        logOut()
+        .then()
+        .catch(error => {
+            console.log(error);
+        })
+    }
+
     const links = (
         <>
             <li><NavLink to="/" className={navLinkClass}>Home</NavLink></li>
@@ -44,12 +54,14 @@ const NavBar = () => {
             </div>
 
             <div className="navbar-end gap-2">
-                <NavLink to="/login" className="text-sm font-medium text-gray-700 px-4 py-1.5 hover:bg-gray-100 rounded-full transition">
-                    Sign In
-                </NavLink>
+                {
+                    user ? <NavLink onClick={handleLogOut} to="/login" className="btn text-sm font-medium text-gray-700 px-4 py-1.5 hover:bg-gray-100 rounded-full transition">LogOut</NavLink>
+
+                    : <NavLink to="/login" className="btn text-sm font-medium text-gray-700 px-4 py-1.5 hover:bg-gray-100 rounded-full transition">Sign In</NavLink>
+                }
                 <div className="relative flex items-center">
-                    <NavLink to="/register" className="bg-[#CAEB45] text-gray-900 font-semibold text-sm px-5 py-2 pr-10 rounded-full hover:bg-[#b8d93a] transition">
-                        Sign Up
+                    <NavLink to="/" className="bg-[#CAEB45] text-gray-900 font-semibold text-sm px-5 py-2 pr-10 rounded-full hover:bg-[#b8d93a] transition">
+                        Be a Rider
                     </NavLink>
                     <span className="absolute -right-3 w-9 h-9 bg-gray-900 text-[#CAEB45] rounded-full flex items-center justify-center text-sm font-bold shadow">↗</span>
                 </div>
