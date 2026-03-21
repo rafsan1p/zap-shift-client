@@ -7,22 +7,32 @@ import SocialLogin from '../SocialLogin/SocialLogin';
 
 const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const {signInUser} = useAuth();
+    const { signInUser, sendVerificationEmail } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     const [showPass, setShowPass] = useState(false);
+    const [authError, setAuthError] = useState('');
 
     const handleLogin = (data) => {
-        console.log('form data', data);
+        setAuthError('');
         signInUser(data.email, data.password)
         .then(res => {
-            console.log(res.user);
-            navigate(location?.state || '/')
+            const user = res.user;
+            if (!user.emailVerified) {
+                sendVerificationEmail()
+                    .then(() => {
+                        navigate('/enter-code', { state: { email: data.email, from: location?.state || '/' } });
+                    })
+                    .catch(err => setAuthError(err.message));
+            } else {
+                navigate(location?.state || '/');
+            }
         })
-        .catch(error =>{
+        .catch(error => {
+            setAuthError('Invalid email or password. Please try again.');
             console.log(error);
-        })
-    }
+        });
+    };
 
 
     return (
@@ -63,6 +73,8 @@ const Login = () => {
                 <button type="submit" className="w-full bg-[#CAEB45] text-gray-900 font-bold py-3 rounded-lg hover:bg-[#b8d93a] transition text-base">
                     Login
                 </button>
+
+                {authError && <p className="text-red-500 text-sm -mt-2">{authError}</p>}
             </form>
 
             <p className="text-sm text-gray-500 mt-4">

@@ -9,45 +9,49 @@ import axios from 'axios';
 const Register = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [showPass, setShowPass] = useState(false);
-    const {registerUser, updateUserProfile} = useAuth();
+    const { registerUser, updateUserProfile, sendVerificationEmail } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
-
+    const [authError, setAuthError] = useState('');
 
     const handleRegistration = (data) => {
-        console.log('After register', data);
+        setAuthError('');
         const profileImg = data.photo[0];
 
         registerUser(data.email, data.password)
-        .then(res =>{
-            console.log(res.user);
-
-            //store the image in formData
+        .then(res => {
             const formData = new FormData();
-            formData.append('image', profileImg)
-            //send the photo to store & get the url
+            formData.append('image', profileImg);
             const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host_key}`;
             axios.post(image_API_URL, formData)
-                .then(res =>{
-                    console.log('After image upload', res.data.data.url);
-                    //update user profile to firebase
+                .then(imgRes => {
                     const userProfile = {
                         displayName: data.name,
-                        photoURL: res.data.data.url
-                    }
+                        photoURL: imgRes.data.data.url
+                    };
                     updateUserProfile(userProfile)
-                        .then(() =>{
-                            console.log('User profile updated.')
-                            navigate(location.state || '/');
+                        .then(() => {
+                            sendVerificationEmail()
+                                .then(() => {
+                                    navigate('/enter-code', { state: { email: data.email, from: location.state || '/' } });
+                                })
+                                .catch(err => setAuthError(err.message));
                         })
-                        .catch(error => console.log(error))
+                        .catch(error => setAuthError(error.message));
                 })
-
+                .catch(() => {
+                    // If image upload fails, still send verification
+                    sendVerificationEmail()
+                        .then(() => {
+                            navigate('/enter-code', { state: { email: data.email, from: location.state || '/' } });
+                        })
+                        .catch(err => setAuthError(err.message));
+                });
         })
-        .catch(error =>{
-            console.log(error);
-        })
-    }
+        .catch(error => {
+            setAuthError(error.message);
+        });
+    };
 
     return (
         <div className="w-full">
@@ -99,6 +103,8 @@ const Register = () => {
                 <button type="submit" className="w-full bg-[#CAEB45] text-gray-900 font-bold py-2.5 rounded-lg hover:bg-[#b8d93a] transition">
                     Register
                 </button>
+
+                {authError && <p className="text-red-500 text-sm -mt-2">{authError}</p>}
             </form>
 
             <p className="text-sm text-gray-500 mt-4">
