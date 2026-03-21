@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import useAuth from '../../../hooks/useAuth';
 import SocialLogin from '../SocialLogin/SocialLogin';
@@ -10,6 +10,9 @@ const Register = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [showPass, setShowPass] = useState(false);
     const {registerUser, updateUserProfile} = useAuth();
+    const location = useLocation();
+    const navigate = useNavigate();
+
 
     const handleRegistration = (data) => {
         console.log('After register', data);
@@ -35,6 +38,7 @@ const Register = () => {
                     updateUserProfile(userProfile)
                         .then(() =>{
                             console.log('User profile updated.')
+                            navigate(location.state || '/');
                         })
                         .catch(error => console.log(error))
                 })
@@ -98,7 +102,7 @@ const Register = () => {
             </form>
 
             <p className="text-sm text-gray-500 mt-4">
-                Already have an account? <Link to="/login" className="text-[#5a8a00] font-medium hover:underline">Login</Link>
+                Already have an account? <Link state={location.state} to="/login" className="text-[#5a8a00] font-medium hover:underline">Login</Link>
             </p>
 
             <SocialLogin></SocialLogin>

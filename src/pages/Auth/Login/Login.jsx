@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../../hooks/useAuth';
@@ -8,6 +8,8 @@ import SocialLogin from '../SocialLogin/SocialLogin';
 const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const {signInUser} = useAuth();
+    const location = useLocation();
+    const navigate = useNavigate();
     const [showPass, setShowPass] = useState(false);
 
     const handleLogin = (data) => {
@@ -15,6 +17,7 @@ const Login = () => {
         signInUser(data.email, data.password)
         .then(res => {
             console.log(res.user);
+            navigate(location?.state || '/')
         })
         .catch(error =>{
             console.log(error);
@@ -63,7 +66,7 @@ const Login = () => {
             </form>
 
             <p className="text-sm text-gray-500 mt-4">
-                Don't have any account? <Link to="/register" className="text-[#5a8a00] font-semibold hover:underline">Register</Link>
+                Don't have any account? <Link state={location.state} to="/register" className="text-[#5a8a00] font-semibold hover:underline">Register</Link>
             </p>
 
             <SocialLogin></SocialLogin>

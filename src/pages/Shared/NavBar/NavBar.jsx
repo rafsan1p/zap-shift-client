@@ -25,7 +25,7 @@ const NavBar = () => {
             <li><NavLink to="/coverage" className={navLinkClass}>Coverage</NavLink></li>
             <li><NavLink to="/about" className={navLinkClass}>About Us</NavLink></li>
             <li><NavLink to="/pricing" className={navLinkClass}>Pricing</NavLink></li>
-            <li><NavLink to="/be-a-rider" className={navLinkClass}>Be a Rider</NavLink></li>
+            <li><NavLink to="/rider" className={navLinkClass}>Be a Rider</NavLink></li>
         </>
     );
 
@@ -60,7 +60,7 @@ const NavBar = () => {
                     : <NavLink to="/login" className="btn text-sm font-medium text-gray-700 px-4 py-1.5 hover:bg-gray-100 rounded-full transition">Sign In</NavLink>
                 }
                 <div className="relative flex items-center">
-                    <NavLink to="/" className="bg-[#CAEB45] text-gray-900 font-semibold text-sm px-5 py-2 pr-10 rounded-full hover:bg-[#b8d93a] transition">
+                    <NavLink to="/rider" className="bg-[#CAEB45] text-gray-900 font-semibold text-sm px-5 py-2 pr-10 rounded-full hover:bg-[#b8d93a] transition">
                         Be a Rider
                     </NavLink>
                     <span className="absolute -right-3 w-9 h-9 bg-gray-900 text-[#CAEB45] rounded-full flex items-center justify-center text-sm font-bold shadow">↗</span>
