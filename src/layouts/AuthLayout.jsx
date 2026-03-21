@@ -2,8 +2,14 @@ import React from 'react';
 import Logo from '../components/Logo/Logo';
 import { Outlet, Link } from 'react-router';
 import authImage from '../assets/authImage.png';
+import Loading from '../components/loading/loading';
+import useAuth from '../hooks/useAuth';
 
 const AuthLayout = () => {
+    const { loading } = useAuth();
+
+    if (loading) return <Loading />;
+
     return (
         <div className="min-h-screen flex flex-col md:flex-row bg-white">
             {/* Left panel — 50% on desktop */}
