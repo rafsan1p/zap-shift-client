@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Login = () => {
+    const [showPass, setShowPass] = useState(false);
+
     return (
         <div className="w-full">
             <h1 className="text-4xl font-extrabold text-gray-900 mb-1">Welcome Back</h1>
@@ -14,7 +17,12 @@ const Login = () => {
                 </div>
                 <div>
                     <label className="text-sm font-semibold text-gray-700 mb-1 block">Password</label>
-                    <input type="password" placeholder="Password" className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#CAEB45] transition" />
+                    <div className="relative">
+                        <input type={showPass ? 'text' : 'password'} placeholder="Password" className="w-full border border-gray-300 rounded-lg px-4 py-3 pr-10 text-sm outline-none focus:border-[#CAEB45] transition" />
+                        <button type="button" onClick={() => setShowPass(p => !p)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            {showPass ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
+                        </button>
+                    </div>
                 </div>
 
                 <Link to="/forgot-password" className="text-sm text-gray-400 hover:text-[#5a8a00] -mt-1">Forget Password?</Link>
