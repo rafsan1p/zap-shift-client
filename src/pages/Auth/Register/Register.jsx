@@ -23,7 +23,7 @@ const Register = () => {
     return (
         <div className="w-full">
             <h1 className="text-4xl font-extrabold text-gray-900 mb-1">Create an Account</h1>
-            <p className="text-gray-500 text-base mb-5">Register with ZapShift</p>
+            <p className="text-gray-800 text-base mb-5">Register with ZapShift</p>
 
             {/* Avatar placeholder */}
             <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-5">
@@ -34,17 +34,19 @@ const Register = () => {
 
             <form onSubmit={handleSubmit(handleRegistration)} className="flex flex-col gap-4">
                 <div>
-                    <label className="text-sm text-gray-600 mb-1 block">Name</label>
+                    <label className="text-base font-semibold text-gray-800 mb-1 block">Name</label>
                     <input type="text" {...register('text', { required: true })} placeholder="Name" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[#CAEB45] transition" />
                 </div>
+
                 <div>
-                    <label className="text-sm text-gray-600 mb-1 block">Email</label>
+                    <label className="text-base font-semibold text-gray-800 mb-1 block">Email</label>
                     <input type="email" {...register('email', { required: true })} placeholder="Email" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[#CAEB45] transition" />
 
                     {errors.email?.type === 'required' && <p className='text-red-500'>Email is Required</p>}
                 </div>
+
                 <div>
-                    <label className="text-sm text-gray-600 mb-1 block">Password</label>
+                    <label className="text-base font-semibold text-gray-800 mb-1 block">Password</label>
                     <div className="relative">
                         <input type={showPass ? 'text' : 'password'} {...register('password', {
                             required: true,
@@ -56,9 +58,9 @@ const Register = () => {
                             {showPass ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
                         </button>
                     </div>
-                    {errors.password?.type === 'required' && <p className='text-red-500 text-xs mt-1'>Password is Required</p>}
-                    {errors.password?.type === 'minLength' && <p className='text-red-500 text-xs mt-1'>Password must be 6 characters or longer</p>}
-                    {errors.password?.type === 'pattern' && <p className='text-red-500 text-xs mt-1'>Password must have uppercase, lowercase and special character</p>}
+                    {errors.password?.type === 'required' && <p className='text-red-500  mt-1'>Password is Required</p>}
+                    {errors.password?.type === 'minLength' && <p className='text-red-500 mt-1'>Password must be 6 characters or longer</p>}
+                    {errors.password?.type === 'pattern' && <p className='text-red-500 mt-1'>Password must have one uppercase, lowercase and special character</p>}
                 </div>
 
                 <button type="submit" className="w-full bg-[#CAEB45] text-gray-900 font-bold py-2.5 rounded-lg hover:bg-[#b8d93a] transition">
