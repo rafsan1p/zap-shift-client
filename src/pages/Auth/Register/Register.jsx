@@ -2,13 +2,22 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import useAuth from '../../../hooks/useAuth';
 
 const Register = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [showPass, setShowPass] = useState(false);
+    const {registerUser} = useAuth();
 
     const handleRegistration = (data) => {
         console.log('After register', data);
+        registerUser(data.email, data.password)
+        .then(res =>{
+            console.log(res.user);
+        })
+        .catch(error =>{
+            console.log(error);
+        })
     }
 
     return (
@@ -42,7 +51,7 @@ const Register = () => {
                             minLength: 6,
                             pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/
                         })} placeholder="Password" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-sm outline-none focus:border-[#CAEB45] transition" />
-                        
+
                         <button type="button" onClick={() => setShowPass(p => !p)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                             {showPass ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
                         </button>
