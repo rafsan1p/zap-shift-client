@@ -10,23 +10,17 @@ const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const registerUser = (email, password) =>{
-        setLoading(true);
-        return createUserWithEmailAndPassword(auth, email, password)
-    }
-    const signInUser = (email, password) =>{
-        setLoading(true);
-        return signInWithEmailAndPassword(auth, email, password);
-    }
-    const signInGoogle = () =>{
-        setLoading(true);
-        return signInWithPopup(auth, googleProvider);
-    }
+    const registerUser = (email, password) =>
+        createUserWithEmailAndPassword(auth, email, password);
 
-    const logOut = () =>{
-        setLoading(true);
-        return signOut(auth);
-    }
+    const signInUser = (email, password) =>
+        signInWithEmailAndPassword(auth, email, password);
+
+    const signInGoogle = () =>
+        signInWithPopup(auth, googleProvider);
+
+    const logOut = () =>
+        signOut(auth);
 
     const updateUserProfile = (profile) =>{
         return updateProfile(auth.currentUser, profile)

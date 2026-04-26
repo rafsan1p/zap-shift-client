@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
+import { useLoaderData } from 'react-router';
 
-const DISTRICTS = [
-    'Dhaka', 'Faridpur', 'Gazipur', 'Gopalganj', 'Kishoreganj', 'Madaripur',
-    'Manikganj', 'Munshiganj', 'Narayanganj', 'Narsingdi', 'Rajbari', 'Shariatpur',
-    'Tangail', 'Bagerhat', 'Chuadanga', 'Jessore', 'Jhenaidah', 'Khulna',
-    'Kushtia', 'Magura', 'Meherpur', 'Narail', 'Satkhira', 'Bogra', 'Chapai Nawabganj',
-    'Joypurhat', 'Naogaon', 'Natore', 'Pabna', 'Rajshahi', 'Sirajganj',
-    'Dinajpur', 'Gaibandha', 'Kurigram', 'Lalmonirhat', 'Nilphamari', 'Panchagarh',
-    'Rangpur', 'Thakurgaon', 'Brahmanbaria', 'Chandpur', 'Comilla', 'Cox\'s Bazar',
-    'Feni', 'Khagrachhari', 'Lakshmipur', 'Noakhali', 'Rangamati', 'Chittagong',
-    'Habiganj', 'Moulvibazar', 'Sunamganj', 'Sylhet', 'Barisal', 'Barguna',
-    'Bhola', 'Jhalokati', 'Patuakhali', 'Pirojpur', 'Jamalpur', 'Mymensingh',
-    'Netrokona', 'Sherpur',
-];
 
 const SendParcel = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, control, formState: { errors } } = useForm();
     const [parcelType, setParcelType] = useState('document');
+    const serviceCenters = useLoaderData();
+    const regionsDuplicate = serviceCenters.map(c => c.region);
+    const regions = [...new Set(regionsDuplicate)];
+    //explore useMemo useCallback
+    const senderRegion = useWatch({ control, name: 'senderRegion'}); 
+    const receiverRegion = useWatch({ control, name: 'receiverRegion'}); 
+
+    const districtsByRegion = region =>{
+        const regionDistricts = serviceCenters.filter(c => c.region === region);
+        const districts = regionDistricts.map(d => d.district);
+        return districts;
+    }
 
     const onSubmit = (data) => {
         console.log({ parcelType, ...data });
@@ -110,8 +110,8 @@ const SendParcel = () => {
                             </div>
 
                             <div>
-                                <label className={labelClass}>Address</label>
-                                <input {...register('senderAddress', { required: true })} placeholder="Address" className={inputClass} />
+                                <label className={labelClass}>Sender Email</label>
+                                <input {...register('senderEmail', { required: true })} placeholder="Sender Email" className={inputClass} />
                                 {errors.senderAddress && <p className="text-red-500 text-xs mt-1">Required</p>}
                             </div>
 
@@ -120,18 +120,41 @@ const SendParcel = () => {
                                 <input {...register('senderPhone', { required: true })} placeholder="Sender Phone No" className={inputClass} />
                                 {errors.senderPhone && <p className="text-red-500 text-xs mt-1">Required</p>}
                             </div>
+                            
+                            <div>
+                                <label className={labelClass}>Sender Region</label>
+                                <div className="relative">
+                                    <select {...register('senderRegion', { required: true })} className={selectClass}>
+                                        <option value="">Select Sender Region</option>
+                                        {
+                                            regions.map((r, i) => <option key={i} value={r}> {r} </option>)
+                                        }
+                                    </select>
+                                    <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">▾</span>
+                                </div>
+                                {errors.senderRegion && <p className="text-red-500 text-xs mt-1">Required</p>}
+                            </div>
 
                             <div>
-                                <label className={labelClass}>Your District</label>
+                                <label className={labelClass}>Sender District</label>
                                 <div className="relative">
                                     <select {...register('senderDistrict', { required: true })} className={selectClass}>
-                                        <option value="">Select your District</option>
-                                        {DISTRICTS.map(d => <option key={d} value={d}>{d}</option>)}
+                                        <option value="">Select Sender District</option>
+                                        {
+                                            districtsByRegion(senderRegion).map((r, i) => <option key={i} value={r}> {r} </option>)
+                                        }
                                     </select>
                                     <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">▾</span>
                                 </div>
                                 {errors.senderDistrict && <p className="text-red-500 text-xs mt-1">Required</p>}
                             </div>
+
+
+                            <div>
+                                <label className={labelClass}>Address</label>
+                                <input {...register('senderAddress', { required: true })} placeholder="Address" className={inputClass} />
+                                {errors.senderAddress && <p className="text-red-500 text-xs mt-1">Required</p>}
+                            </div>                           
 
                             <div>
                                 <label className={labelClass}>Pickup Instruction</label>
@@ -150,8 +173,8 @@ const SendParcel = () => {
                             </div>
 
                             <div>
-                                <label className={labelClass}>Receiver Address</label>
-                                <input {...register('receiverAddress', { required: true })} placeholder="Address" className={inputClass} />
+                                <label className={labelClass}>Receiver Email</label>
+                                <input {...register('receiverEmail', { required: true })} placeholder="Receiver Email" className={inputClass} />
                                 {errors.receiverAddress && <p className="text-red-500 text-xs mt-1">Required</p>}
                             </div>
 
@@ -161,17 +184,43 @@ const SendParcel = () => {
                                 {errors.receiverPhone && <p className="text-red-500 text-xs mt-1">Required</p>}
                             </div>
 
+                            {/* receiver region */}
+                            <div>
+                                <label className={labelClass}>Receiver Region</label>
+                                <div className="relative">
+                                    <select {...register('receiverRegion', { required: true })} className={selectClass}>
+                                        <option value="">Select Receiver Region</option>
+                                        {
+                                            regions.map((r, i) => <option key={i} value={r}> {r} </option>)
+                                        }
+                                    </select>
+                                    <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">▾</span>
+                                </div>
+                                {errors.receiverRegion && <p className="text-red-500 text-xs mt-1">Required</p>}
+                            </div>
+
+                            {/* receiver district */}
                             <div>
                                 <label className={labelClass}>Receiver District</label>
                                 <div className="relative">
                                     <select {...register('receiverDistrict', { required: true })} className={selectClass}>
-                                        <option value="">Select your District</option>
-                                        {DISTRICTS.map(d => <option key={d} value={d}>{d}</option>)}
+                                        <option value="">Select Receiver District</option>
+                                        {
+                                            districtsByRegion(receiverRegion).map((d, i) => <option key={i} value={d}> {d} </option>)
+                                        }
                                     </select>
                                     <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">▾</span>
                                 </div>
                                 {errors.receiverDistrict && <p className="text-red-500 text-xs mt-1">Required</p>}
                             </div>
+                            
+
+
+                            <div>
+                                <label className={labelClass}>Receiver Address</label>
+                                <input {...register('receiverAddress', { required: true })} placeholder="Address" className={inputClass} />
+                                {errors.receiverAddress && <p className="text-red-500 text-xs mt-1">Required</p>}
+                            </div>                          
 
                             <div>
                                 <label className={labelClass}>Delivery Instruction</label>

@@ -20,7 +20,9 @@ export const router = createBrowserRouter([
     children: [
       { index: true, Component: Home },
       { path: 'rider', element: <PrivateRoute><Rider></Rider></PrivateRoute>},
-      { path: 'send-parcel', element: <PrivateRoute><SendParcel></SendParcel></PrivateRoute>},
+      { path: 'send-parcel', element: <PrivateRoute><SendParcel></SendParcel></PrivateRoute>,
+        loader: () => fetch('/serviceCenters.json').then(res => res.json())
+      },
       { path: "coverage", Component: Coverage, loader: () => fetch('/serviceCenters.json').then(res => res.json()) },
       { path: "about", Component: About },
     ]
