@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useLoaderData } from 'react-router';
+import Swal from 'sweetalert2';
 
 
 const SendParcel = () => {
@@ -10,17 +11,53 @@ const SendParcel = () => {
     const regionsDuplicate = serviceCenters.map(c => c.region);
     const regions = [...new Set(regionsDuplicate)];
     //explore useMemo useCallback
-    const senderRegion = useWatch({ control, name: 'senderRegion'}); 
-    const receiverRegion = useWatch({ control, name: 'receiverRegion'}); 
+    const senderRegion = useWatch({ control, name: 'senderRegion' });
+    const receiverRegion = useWatch({ control, name: 'receiverRegion' });
 
-    const districtsByRegion = region =>{
+    const districtsByRegion = region => {
         const regionDistricts = serviceCenters.filter(c => c.region === region);
         const districts = regionDistricts.map(d => d.district);
         return districts;
     }
 
     const onSubmit = (data) => {
-        console.log({ parcelType, ...data });
+        const isDocument = parcelType === 'document';
+        const isSameDistrict = data.senderDistrict === data.receiverDistrict;
+        const parcelWeight = parseFloat(data.parcelWeight);
+
+        let cost = 0;
+        if (isDocument) {
+            cost = isSameDistrict ? 60 : 80;
+        }
+        else {
+            if (parcelWeight < 3) {
+                cost = isSameDistrict ? 110 : 150;
+            }
+            else {
+                const minCharge = isSameDistrict ? 110 : 150;
+                const extraWeight = parcelWeight - 3;
+                const extraCharge = isSameDistrict ? extraWeight * 40 : extraWeight * 40 + 40;
+                cost = minCharge + extraCharge;
+            }
+        }
+        console.log(cost);
+
+        Swal.fire({
+            title: "Agree with the Cost?",
+            text: `You will be charged ${cost} taka!`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "I agree!"
+        }).then((result) => {
+            if (result.isConfirmed) Swal.fire({
+                
+                // title: "Deleted!",
+                // text: "Your file has been deleted.",
+                // icon: "success"
+            });
+        });
     };
 
     const inputClass = 'w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-[#CAEB45] transition placeholder:text-gray-400';
@@ -120,7 +157,7 @@ const SendParcel = () => {
                                 <input {...register('senderPhone', { required: true })} placeholder="Sender Phone No" className={inputClass} />
                                 {errors.senderPhone && <p className="text-red-500 text-xs mt-1">Required</p>}
                             </div>
-                            
+
                             <div>
                                 <label className={labelClass}>Sender Region</label>
                                 <div className="relative">
@@ -154,7 +191,7 @@ const SendParcel = () => {
                                 <label className={labelClass}>Address</label>
                                 <input {...register('senderAddress', { required: true })} placeholder="Address" className={inputClass} />
                                 {errors.senderAddress && <p className="text-red-500 text-xs mt-1">Required</p>}
-                            </div>                           
+                            </div>
 
                             <div>
                                 <label className={labelClass}>Pickup Instruction</label>
@@ -213,14 +250,14 @@ const SendParcel = () => {
                                 </div>
                                 {errors.receiverDistrict && <p className="text-red-500 text-xs mt-1">Required</p>}
                             </div>
-                            
+
 
 
                             <div>
                                 <label className={labelClass}>Receiver Address</label>
                                 <input {...register('receiverAddress', { required: true })} placeholder="Address" className={inputClass} />
                                 {errors.receiverAddress && <p className="text-red-500 text-xs mt-1">Required</p>}
-                            </div>                          
+                            </div>
 
                             <div>
                                 <label className={labelClass}>Delivery Instruction</label>
