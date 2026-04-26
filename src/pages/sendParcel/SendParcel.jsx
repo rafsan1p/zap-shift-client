@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useLoaderData } from 'react-router';
 import Swal from 'sweetalert2';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+import useAuth from '../../hooks/useAuth';
 
 
 const SendParcel = () => {
     const { register, handleSubmit, control, formState: { errors } } = useForm();
+    const {user} = useAuth();
+    const axiosSecure = useAxiosSecure();
     const [parcelType, setParcelType] = useState('document');
     const serviceCenters = useLoaderData();
     const regionsDuplicate = serviceCenters.map(c => c.region);
@@ -51,12 +55,16 @@ const SendParcel = () => {
             cancelButtonColor: "#d33",
             confirmButtonText: "I agree!"
         }).then((result) => {
-            if (result.isConfirmed) Swal.fire({
-                
-                // title: "Deleted!",
-                // text: "Your file has been deleted.",
-                // icon: "success"
-            });
+            if (result.isConfirmed) {
+                axiosSecure.post('/parcels', data).then(res => {
+                    console.log('After saving parcel', res.data);
+                    Swal.fire({
+                        title: "Booking Confirmed!",
+                        text: "Your parcel has been booked successfully.",
+                        icon: "success"
+                    });
+                });
+            }
         });
     };
 
@@ -142,13 +150,17 @@ const SendParcel = () => {
 
                             <div>
                                 <label className={labelClass}>Sender Name</label>
-                                <input {...register('senderName', { required: true })} placeholder="Sender Name" className={inputClass} />
+                                <input {...register('senderName', { required: true })} 
+                                defaultValue={user.displayName}
+                                placeholder="Sender Name" className={inputClass} />
                                 {errors.senderName && <p className="text-red-500 text-xs mt-1">Required</p>}
                             </div>
 
                             <div>
                                 <label className={labelClass}>Sender Email</label>
-                                <input {...register('senderEmail', { required: true })} placeholder="Sender Email" className={inputClass} />
+                                <input {...register('senderEmail', { required: true })} 
+                                defaultValue={user?.email}
+                                placeholder="Sender Email" className={inputClass} />
                                 {errors.senderAddress && <p className="text-red-500 text-xs mt-1">Required</p>}
                             </div>
 
